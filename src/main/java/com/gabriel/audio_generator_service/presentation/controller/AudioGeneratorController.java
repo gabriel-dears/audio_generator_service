@@ -18,6 +18,11 @@ public class AudioGeneratorController {
     @Autowired
     private AudioGeneratorService audioGeneratorService;
 
+    @PostMapping("/test")
+    public AudioGeneratorResponse generateAudios2(@RequestBody AudioGeneratorRequest audioGeneratorRequest) throws IOException {
+        return audioGeneratorService.test(audioGeneratorRequest);
+    }
+
     @PostMapping("/channel")
     public AudioGeneratorResponse generateAudios(@RequestBody AudioGeneratorRequest audioGeneratorRequest) throws IOException {
         return audioGeneratorService.generateAudios(audioGeneratorRequest);

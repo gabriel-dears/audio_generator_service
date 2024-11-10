@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: audio_generator_service
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: pass

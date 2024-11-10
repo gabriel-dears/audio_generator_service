@@ -2,6 +2,7 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_spli
 
 import com.gabriel.audio_generator_service.application.command_runner.AsyncCommandRunner;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderAsyncCommandRunner;
+import com.gabriel.audio_generator_service.application.service.messaging.audio.AudioMessageProducer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,12 @@ public class AudioSplittingService {
 
     @Value("${CLIPS_DIR}")
     private String CLIPS_DIR;
+
+    private final AudioMessageProducer audioMessageProducer;
+
+    public AudioSplittingService(AudioMessageProducer audioMessageProducer) {
+        this.audioMessageProducer = audioMessageProducer;
+    }
 
     public void splitAudio(String audioFilePath, String outputPattern) throws IOException, InterruptedException {
         // Initialize ProcessBuilder
@@ -32,5 +39,8 @@ public class AudioSplittingService {
 
         // Execute command and return exit code
         asyncCommandRunner.executeAsync();
+
+        audioMessageProducer.sendMessage("message");
+
     }
 }

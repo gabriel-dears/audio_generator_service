@@ -5,6 +5,7 @@ import com.gabriel.audio_generator_service.application.dto.AudioGeneratorRespons
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
 import com.gabriel.audio_generator_service.application.service.audio.audio_download.AudioDownloadService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_splitting.AudioSplittingService;
+import com.gabriel.audio_generator_service.application.service.messaging.audio.AudioMessageProducer;
 import com.gabriel.audio_generator_service.application.service.url.query_param.QueryParamExtractor;
 import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
 import org.springframework.stereotype.Component;
@@ -21,18 +22,21 @@ public class AudioGeneratorService {
     private final AudioProcessingStrategy audioProcessingStrategy;
     private final AudioSplittingService audioSplittingService;
     private final QueryParamExtractor queryParamExtractor;
+    private final AudioMessageProducer audioMessageProducer;
 
     public AudioGeneratorService(
             YouTubeService youTubeService,
             AudioDownloadService audioDownloadService,
             AudioProcessingStrategy audioProcessingStrategy,
             AudioSplittingService audioSplittingService,
-            QueryParamExtractor queryParamExtractor) {
+            QueryParamExtractor queryParamExtractor, AudioMessageProducer audioMessageProducer
+    ) {
         this.youTubeService = youTubeService;
         this.audioDownloadService = audioDownloadService;
         this.audioProcessingStrategy = audioProcessingStrategy;
         this.audioSplittingService = audioSplittingService;
         this.queryParamExtractor = queryParamExtractor;
+        this.audioMessageProducer = audioMessageProducer;
     }
 
     public AudioGeneratorResponse generateAudios(AudioGeneratorRequest audioGeneratorRequest) {
@@ -75,5 +79,10 @@ public class AudioGeneratorService {
     private String getVideoId(String videoUrl) {
         Map<String, String> queryParams = queryParamExtractor.getQueryParams(videoUrl);
         return queryParams.get("v");
+    }
+
+    public AudioGeneratorResponse test(AudioGeneratorRequest audioGeneratorRequest) {
+        audioMessageProducer.sendMessage("bla bla bla");
+        return null;
     }
 }
