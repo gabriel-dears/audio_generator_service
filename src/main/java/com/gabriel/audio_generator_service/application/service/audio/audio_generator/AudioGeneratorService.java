@@ -6,7 +6,7 @@ import com.gabriel.audio_generator_service.application.service.AudioProcessingSt
 import com.gabriel.audio_generator_service.application.service.audio.audio_download.AudioDownloadService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_splitting.AudioSplittingService;
 import com.gabriel.audio_generator_service.application.service.url.query_param.QueryParamExtractor;
-import com.gabriel.audio_generator_service.application.service.youtube.video_url.YoutubeVideoUrlFetcherService;
+import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,19 +16,19 @@ import java.util.Map;
 @Component
 public class AudioGeneratorService {
 
-    private final YoutubeVideoUrlFetcherService youtubeVideoUrlFetcherService;
+    private final YouTubeService youTubeService;
     private final AudioDownloadService audioDownloadService;
     private final AudioProcessingStrategy audioProcessingStrategy;
     private final AudioSplittingService audioSplittingService;
     private final QueryParamExtractor queryParamExtractor;
 
     public AudioGeneratorService(
-            YoutubeVideoUrlFetcherService youtubeVideoUrlFetcherService,
+            YouTubeService youTubeService,
             AudioDownloadService audioDownloadService,
             AudioProcessingStrategy audioProcessingStrategy,
             AudioSplittingService audioSplittingService,
             QueryParamExtractor queryParamExtractor) {
-        this.youtubeVideoUrlFetcherService = youtubeVideoUrlFetcherService;
+        this.youTubeService = youTubeService;
         this.audioDownloadService = audioDownloadService;
         this.audioProcessingStrategy = audioProcessingStrategy;
         this.audioSplittingService = audioSplittingService;
@@ -37,7 +37,7 @@ public class AudioGeneratorService {
 
     public AudioGeneratorResponse generateAudios(AudioGeneratorRequest audioGeneratorRequest) {
         try {
-            List<String> videos = youtubeVideoUrlFetcherService.fetchVideoUrls(audioGeneratorRequest.getChannelId());
+            List<String> videos = youTubeService.getChannelVideos(audioGeneratorRequest.getChannelId());
             handleVideosUrlsFromResponse(videos);
             return new AudioGeneratorResponse("Clips created successfully!");
         } catch (IOException | InterruptedException e) {

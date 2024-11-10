@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.gabriel</groupId>
-    <artifactId>clipcrafter</artifactId>
+    <artifactId>audio_generator_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>audio_generator_service</name>
     <description>audio_generator_service</description>

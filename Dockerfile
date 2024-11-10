@@ -20,5 +20,5 @@ RUN mkdir -p $CLIPS_DIR
 EXPOSE 8080
 
 # Copy and build your application
-COPY target/clipcrafter-0.0.1-SNAPSHOT.jar /app.jar
+COPY target/audio_generator_service.jar /app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
