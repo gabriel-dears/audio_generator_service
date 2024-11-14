@@ -20,7 +20,7 @@ public class RabbitConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("172.23.0.2");  // or your RabbitMQ host
+        connectionFactory.setHost("rabbitmq");  // or your RabbitMQ host
         connectionFactory.setPort(5672);  // default RabbitMQ port
         connectionFactory.setUsername("user");
         connectionFactory.setPassword("pass");
@@ -29,7 +29,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE_NAME, false);
+        return new Queue(QUEUE_NAME, true);
     }
 
     @Bean
