@@ -4,7 +4,7 @@ import com.gabriel.audio_generator_service.application.command_runner.CommandRes
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
-import com.gabriel.audio_generator_service.infrastructure.utils.UrlGenerator;
+import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

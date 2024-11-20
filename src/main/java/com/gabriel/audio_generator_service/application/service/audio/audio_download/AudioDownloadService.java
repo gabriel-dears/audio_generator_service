@@ -3,7 +3,7 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_down
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
-import com.gabriel.audio_generator_service.infrastructure.utils.UrlGenerator;
+import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

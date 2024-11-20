@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/generate-audio")
 public class AudioGeneratorController {
@@ -18,14 +16,9 @@ public class AudioGeneratorController {
     @Autowired
     private AudioGeneratorService audioGeneratorService;
 
-    @PostMapping("/test")
-    public AudioGeneratorResponse generateAudios2(@RequestBody AudioGeneratorRequest audioGeneratorRequest) throws IOException {
-        return audioGeneratorService.test(audioGeneratorRequest);
-    }
-
     @PostMapping("/channel")
-    public AudioGeneratorResponse generateAudios(@RequestBody AudioGeneratorRequest audioGeneratorRequest) throws IOException {
-        return audioGeneratorService.generateAudios(audioGeneratorRequest);
+    public AudioGeneratorResponse generateAudios(@RequestBody AudioGeneratorRequest audioGeneratorRequest) {
+        return audioGeneratorService.executeAudioGeneration(audioGeneratorRequest);
     }
 }
 

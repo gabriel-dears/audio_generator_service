@@ -1,4 +1,4 @@
-package com.gabriel.audio_generator_service.infrastructure.utils;
+package com.gabriel.audio_generator_service.application.service.url.url_generator;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
