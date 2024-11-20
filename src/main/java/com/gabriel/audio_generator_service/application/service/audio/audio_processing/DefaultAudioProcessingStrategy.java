@@ -4,10 +4,10 @@ import com.gabriel.audio_generator_service.application.command_runner.CommandRes
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
+import com.gabriel.audio_generator_service.infrastructure.utils.UrlGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 
 @Component
@@ -28,13 +28,16 @@ public class DefaultAudioProcessingStrategy implements AudioProcessingStrategy {
     @Value("${audio.audioFormat:loudnorm}")
     private String audioFormat;
 
-    @Value("${CLIPS_DIR}")
-    private String CLIPS_DIR;
+    private final UrlGenerator urlGenerator;
+
+    public DefaultAudioProcessingStrategy(UrlGenerator urlGenerator) {
+        this.urlGenerator = urlGenerator;
+    }
 
     @Override
     public boolean processAudio(String videoId) throws IOException, InterruptedException {
         SyncCommandRunner syncCommandRunner = new ProcessBuilderSyncCommandRunner();
-        syncCommandRunner.directory(new File(CLIPS_DIR));
+        syncCommandRunner.directory(urlGenerator.getClipsUrlBasedOnVideoIdAsFile(videoId));
 
         String inputAudioFile = videoId + ".wav";
         String outputAudioFile = videoId + "_processed.wav";

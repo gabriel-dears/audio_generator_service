@@ -1,5 +1,7 @@
 package com.gabriel.audio_generator_service.application.service.audio.audio_generator;
 
+import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
+import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
 import com.gabriel.audio_generator_service.application.dto.AudioGeneratorRequest;
 import com.gabriel.audio_generator_service.application.dto.AudioGeneratorResponse;
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
@@ -8,6 +10,7 @@ import com.gabriel.audio_generator_service.application.service.audio.audio_split
 import com.gabriel.audio_generator_service.application.service.messaging.audio.AudioMessageProducer;
 import com.gabriel.audio_generator_service.application.service.url.query_param.QueryParamExtractor;
 import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
+import com.gabriel.audio_generator_service.infrastructure.utils.UrlGenerator;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,13 +26,14 @@ public class AudioGeneratorService {
     private final AudioSplittingService audioSplittingService;
     private final QueryParamExtractor queryParamExtractor;
     private final AudioMessageProducer audioMessageProducer;
+    private final UrlGenerator urlGenerator;
 
     public AudioGeneratorService(
             YouTubeService youTubeService,
             AudioDownloadService audioDownloadService,
             AudioProcessingStrategy audioProcessingStrategy,
             AudioSplittingService audioSplittingService,
-            QueryParamExtractor queryParamExtractor, AudioMessageProducer audioMessageProducer
+            QueryParamExtractor queryParamExtractor, AudioMessageProducer audioMessageProducer, UrlGenerator urlGenerator
     ) {
         this.youTubeService = youTubeService;
         this.audioDownloadService = audioDownloadService;
@@ -37,6 +41,7 @@ public class AudioGeneratorService {
         this.audioSplittingService = audioSplittingService;
         this.queryParamExtractor = queryParamExtractor;
         this.audioMessageProducer = audioMessageProducer;
+        this.urlGenerator = urlGenerator;
     }
 
     public AudioGeneratorResponse generateAudios(AudioGeneratorRequest audioGeneratorRequest) {
@@ -57,6 +62,10 @@ public class AudioGeneratorService {
 
     private void getVideoFromUrlAndHandleAudio(String videoUrl) throws IOException, InterruptedException {
         String videoId = getVideoId(videoUrl);
+        SyncCommandRunner syncCommandRunner = new ProcessBuilderSyncCommandRunner();
+        syncCommandRunner.directory(urlGenerator.getBaseUrlAsFile());
+        syncCommandRunner.command("mkdir", "-p", "clips_" + videoId);
+        syncCommandRunner.execute();
         if (isAudioDownloaded(videoUrl, videoId)) {
             processAndSplitAudio(videoId);
         }
@@ -68,7 +77,7 @@ public class AudioGeneratorService {
 
     private void processAndSplitAudio(String videoId) throws IOException, InterruptedException {
         if (isAudioProcessedAudioGenerated(videoId)) {
-            audioSplittingService.splitAudio(videoId + "_processed.wav", videoId + "_%03d.wav");
+            audioSplittingService.splitAudio(videoId, videoId + "_processed.wav", videoId + "_%03d.wav");
         }
     }
 
