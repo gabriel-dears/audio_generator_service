@@ -6,12 +6,12 @@ import com.gabriel.audio_generator_service.application.service.audio.audio_base_
 import com.gabriel.audio_generator_service.application.service.audio.audio_execution.AudioExecutionService;
 import com.gabriel.audio_generator_service.application.service.url.url_extractor.UrlExtractorService;
 import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 
-@Component
+@Service
 public class AudioGeneratorService {
 
     private final YouTubeService youTubeService;

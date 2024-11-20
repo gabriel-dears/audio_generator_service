@@ -1,12 +1,12 @@
 package com.gabriel.audio_generator_service.application.service.file.files_manager;
 
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Optional;
 
-@Component
+@Service
 public class FilesManager {
 
     private final UrlGenerator urlGenerator;

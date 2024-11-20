@@ -3,10 +3,12 @@ package com.gabriel.audio_generator_service.application.command_runner.folder.fo
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 
+@Service
 public class FolderCreatorServiceImpl implements FolderCreatorService {
 
     private final SyncCommandRunner syncCommandRunner = new ProcessBuilderSyncCommandRunner();

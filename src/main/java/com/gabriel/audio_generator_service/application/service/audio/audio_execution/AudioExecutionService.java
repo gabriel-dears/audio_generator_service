@@ -5,10 +5,12 @@ import com.gabriel.audio_generator_service.application.service.AudioProcessingSt
 import com.gabriel.audio_generator_service.application.service.audio.audio_download.AudioDownloadService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_splitting.AudioSplittingService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_submission.AudioSubmissionService;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+@Service
 public class AudioExecutionService {
 
     private final AudioDownloadService audioDownloadService;

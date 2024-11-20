@@ -3,11 +3,11 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_base
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.folder.folder_creator.FolderCreatorService;
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Component
+@Service
 public class AudioBaseFolderCreatorService {
 
     private final FolderCreatorService folderCreatorService;

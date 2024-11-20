@@ -1,11 +1,11 @@
 package com.gabriel.audio_generator_service.application.service.url.url_generator;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-@Component
+@Service
 public class UrlGenerator {
 
     private final String baseUrl;

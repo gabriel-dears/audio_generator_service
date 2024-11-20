@@ -6,11 +6,11 @@ import com.gabriel.audio_generator_service.application.command_runner.SyncComman
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Component
+@Service
 public class DefaultAudioProcessingStrategy implements AudioProcessingStrategy {
 
     @Value("${audio.ffmpeg.command:ffmpeg}")

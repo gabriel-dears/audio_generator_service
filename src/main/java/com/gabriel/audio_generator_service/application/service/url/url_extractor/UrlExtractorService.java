@@ -1,11 +1,11 @@
 package com.gabriel.audio_generator_service.application.service.url.url_extractor;
 
 import com.gabriel.audio_generator_service.application.service.url.query_param.QueryParamExtractor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Component
+@Service
 public class UrlExtractorService {
 
     private final QueryParamExtractor queryParamExtractor;

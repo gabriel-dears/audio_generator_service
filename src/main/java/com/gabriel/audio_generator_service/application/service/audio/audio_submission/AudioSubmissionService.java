@@ -1,16 +1,16 @@
 package com.gabriel.audio_generator_service.application.service.audio.audio_submission;
 
 import com.gabriel.audio_generator_service.application.service.AudioMessageProducerStrategy;
-import com.gabriel.audio_generator_service.application.service.messaging.audio.Base64StringAudioMessageProducerStrategy;
 import com.gabriel.audio_generator_service.application.service.file.files_manager.FilesManager;
+import com.gabriel.audio_generator_service.application.service.messaging.audio.Base64StringAudioMessageProducerStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 
-@Component
+@Service
 public class AudioSubmissionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AudioSubmissionService.class);
