@@ -1,4 +1,4 @@
-package com.gabriel.audio_generator_service.application.service.audio.audio_processing;
+package com.gabriel.audio_generator_service.domain.service.audio.audio_processing;
 
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;

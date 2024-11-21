@@ -2,7 +2,7 @@ package com.gabriel.audio_generator_service.presentation.controller;
 
 import com.gabriel.audio_generator_service.application.dto.AudioGeneratorRequest;
 import com.gabriel.audio_generator_service.application.dto.AudioGeneratorResponse;
-import com.gabriel.audio_generator_service.application.service.audio.audio_generator.AudioGeneratorService;
+import com.gabriel.audio_generator_service.application.facade.AudioGenerationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AudioGeneratorController {
 
     @Autowired
-    private AudioGeneratorService audioGeneratorService;
+    private AudioGenerationFacade audioGenerationFacade;
 
     @PostMapping("/channel")
     public AudioGeneratorResponse generateAudios(@RequestBody AudioGeneratorRequest audioGeneratorRequest) {
-        return audioGeneratorService.executeAudioGeneration(audioGeneratorRequest);
+        return audioGenerationFacade.executeAudioGeneration(audioGeneratorRequest);
     }
 }
 
