@@ -1,8 +1,11 @@
 package com.gabriel.audio_generator_service.application.command_runner;
 
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 
+@Service
 public class ProcessBuilderSyncCommandRunner implements SyncCommandRunner {
     private String[] command;
     private File directory;
