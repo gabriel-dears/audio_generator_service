@@ -1,8 +1,7 @@
 package com.gabriel.audio_generator_service.application.service.audio.audio_submission;
 
 import com.gabriel.audio_generator_service.application.service.AudioMessageProducerStrategy;
-import com.gabriel.audio_generator_service.application.service.file.files_manager.FilesManager;
-import com.gabriel.audio_generator_service.application.service.messaging.audio.Base64StringAudioMessageProducerStrategy;
+import com.gabriel.audio_generator_service.application.service.audio.file.AudioFilesConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,12 @@ import java.io.IOException;
 public class AudioSubmissionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AudioSubmissionService.class);
-    private final FilesManager filesManager;
-    private final AudioMessageProducerStrategy audioMessageProducer;
+    private final AudioFilesConverter audioFilesConverter;
+    private final AudioMessageProducerStrategy audioMessageProducerStrategy;
 
-    public AudioSubmissionService(FilesManager filesManager, Base64StringAudioMessageProducerStrategy base64StringAudioMessageProducerStrategy) {
-        this.filesManager = filesManager;
-        this.audioMessageProducer = base64StringAudioMessageProducerStrategy;
+    public AudioSubmissionService(AudioFilesConverter audioFilesConverter, AudioMessageProducerStrategy audioMessageProducerStrategy) {
+        this.audioFilesConverter = audioFilesConverter;
+        this.audioMessageProducerStrategy = audioMessageProducerStrategy;
     }
 
     public void submitAudio(String videoId) {
@@ -46,11 +45,11 @@ public class AudioSubmissionService {
     }
 
     private File[] getAudioChunksAsFiles(String videoId) {
-        return filesManager.getAsFileArray(videoId);
+        return audioFilesConverter.getAsFileArray(videoId);
     }
 
     private void sendAudioToTheQueue(File chunkFile) throws IOException {
-        audioMessageProducer.sendMessage(chunkFile);
+        audioMessageProducerStrategy.sendMessage(chunkFile);
     }
 
 }
