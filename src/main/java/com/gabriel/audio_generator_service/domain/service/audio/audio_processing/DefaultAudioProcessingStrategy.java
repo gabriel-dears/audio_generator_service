@@ -13,19 +13,19 @@ import java.io.IOException;
 @Service
 public class DefaultAudioProcessingStrategy implements AudioProcessingStrategy {
 
-    @Value("${audio.ffmpeg.command:ffmpeg}")
+    @Value("${audio.ffmpeg.command}")
     private String ffmpegCommand;
 
-    @Value("${audio.sampleRate:16000}")
+    @Value("${audio.sample-rate}")
     private int sampleRate;
 
-    @Value("${audio.channels:1}")
+    @Value("${audio.channels}")
     private int channels;
 
-    @Value("${audio.audioEncoding:pcm_s16le}")
+    @Value("${audio.audio-encoding}")
     private String audioEncoding;
 
-    @Value("${audio.audioFormat:loudnorm}")
+    @Value("${audio.audio-format}")
     private String audioFormat;
 
     private final UrlGenerator urlGenerator;

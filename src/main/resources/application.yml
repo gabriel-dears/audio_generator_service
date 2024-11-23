@@ -1,8 +1,46 @@
+# YouTube API Key, should be provided through an environment variable
+# Default value set to an empty string
+youtube-api-key: ${YOUTUBE_API_KEY:default_api_key}
+
+# Directory where clips are stored, should be provided through an environment variable
+# Default directory set to 'clips'
+clips-dir: ${CLIPS_DIR:clips}
+
 spring:
-  application:
-    name: audio_generator_service
   rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: user
-    password: pass
+    # Host for RabbitMQ, should be provided through an environment variable
+    # Default host set to 'localhost'
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+
+    # Port for RabbitMQ, should be provided through an environment variable
+    # Default port set to '5672'
+    port: ${SPRING_RABBITMQ_PORT:5672}
+
+    # Username for RabbitMQ, should be provided through an environment variable
+    # Default username set to 'guest'
+    username: ${SPRING_RABBITMQ_USERNAME:user}
+
+    # Password for RabbitMQ, should be provided through an environment variable
+    # Default password set to 'guest'
+    password: ${SPRING_RABBITMQ_PASSWORD:pass}
+
+audio:
+  ffmpeg:
+    # Command for ffmpeg, should be provided through an environment variable or default to 'ffmpeg'
+    command: ${AUDIO_FFMPEG_COMMAND:ffmpeg}  # Default command for ffmpeg, change if needed
+
+  # Sample rate for audio processing, should be provided through an environment variable
+  # Default sample rate set to '16000'
+  sample-rate: ${AUDIO_SAMPLE_RATE:16000}  # Default sample rate for audio processing
+
+  # Number of audio channels, should be provided through an environment variable
+  # Default channels set to '1'
+  channels: ${AUDIO_CHANNELS:1}  # Default number of audio channels
+
+  # Audio encoding format, should be provided through an environment variable
+  # Default encoding set to 'pcm_s16le'
+  audio-encoding: ${AUDIO_ENCODING:pcm_s16le}  # Default audio encoding format
+
+  # Audio format for filtering, should be provided through an environment variable
+  # Default filter format set to 'loudnorm'
+  audio-format: ${AUDIO_FORMAT:loudnorm}  # Default audio filter format

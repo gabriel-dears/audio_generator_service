@@ -19,16 +19,16 @@ public class RabbitConfig {
     public static final String QUEUE_NAME = "audio_queue";
     public static final String EXCHANGE_NAME = "audio_exchange";
 
-    @Value("${SPRING_RABBITMQ_HOST}")
+    @Value("${spring.rabbitmq.host}")
     private String rabbitHost;
 
-    @Value("${SPRING_RABBITMQ_PORT}")
+    @Value("${spring.rabbitmq.port}")
     private int rabbitPort;
 
-    @Value("${SPRING_RABBITMQ_USERNAME}")
+    @Value("${spring.rabbitmq.username}")
     private String rabbitUsername;
 
-    @Value("${SPRING_RABBITMQ_PASSWORD}")
+    @Value("${spring.rabbitmq.password}")
     private String rabbitPassword;
 
     @Bean

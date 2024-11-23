@@ -10,7 +10,7 @@ public class UrlGenerator {
 
     private final String baseUrl;
 
-    public UrlGenerator(@Value("${CLIPS_DIR}") String baseUrl) {
+    public UrlGenerator(@Value("${clips-dir}") String baseUrl) {
         this.baseUrl = baseUrl;
     }
 

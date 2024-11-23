@@ -16,7 +16,7 @@ public class YouTubeService {
 
     private final YouTube youtube;
 
-    @Value("${YOUTUBE_API_KEY}")
+    @Value("${youtube-api-key}")
     private String YOUTUBE_API_KEY;
 
     @Autowired
