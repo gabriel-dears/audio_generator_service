@@ -11,8 +11,7 @@ public class YouTubeConfig {
 
     @Bean
     public YouTube youtube() throws Exception {
-        return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), httpRequest -> {
-        })
+        return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), null)
                 .setApplicationName("YouTubeClipCreator")
                 .build();
     }
