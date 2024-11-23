@@ -32,7 +32,7 @@ public class AudioDeletionService {
     }
 
     // Scheduled task to delete all directories once a day
-    @Scheduled(cron = "0 57 23 * * ?", zone = "America/Sao_Paulo") // Runs at midnight every day
+    @Scheduled(cron = "0 50 22 * * ?", zone = "America/Sao_Paulo") // Runs at midnight every day
     public void deleteDirectoriesOnceADay() {
         handleFoldersDeletion();
         foldersToDelete.clear();

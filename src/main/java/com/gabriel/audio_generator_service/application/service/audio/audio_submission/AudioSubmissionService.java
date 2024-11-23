@@ -21,26 +21,26 @@ public class AudioSubmissionService {
         this.audioMessageProducerStrategy = audioMessageProducerStrategy;
     }
 
-    public void submitAudio(String videoId) {
-        handlePartitionedAudios(videoId);
+    public void submitAudio(String videoId, String channelId) {
+        handlePartitionedAudios(videoId, channelId);
     }
 
-    private void handlePartitionedAudios(String videoId) {
+    private void handlePartitionedAudios(String videoId, String channelId) {
         try {
-            handleSubmissionProcess(videoId);
+            handleSubmissionProcess(videoId, channelId);
         } catch (IOException e) {
             LOGGER.error("Error while splitting {} audios and sending to the queue: {}", videoId, e.getMessage(), e);
         }
     }
 
-    private void handleSubmissionProcess(String videoId) throws IOException {
+    private void handleSubmissionProcess(String videoId, String channelId) throws IOException {
         File[] chunkFiles = getAudioChunksAsFiles(videoId);
-        sendAudiosChunksToTheQueue(chunkFiles);
+        sendAudiosChunksToTheQueue(chunkFiles, videoId, channelId);
     }
 
-    private void sendAudiosChunksToTheQueue(File[] chunkFiles) throws IOException {
+    private void sendAudiosChunksToTheQueue(File[] chunkFiles, String videoId, String channelId) throws IOException {
         for (File chunkFile : chunkFiles) {
-            sendAudioToTheQueue(chunkFile);
+            sendAudioToTheQueue(chunkFile, videoId, channelId);
         }
     }
 
@@ -48,8 +48,8 @@ public class AudioSubmissionService {
         return audioFilesConverter.getAsFileArray(videoId);
     }
 
-    private void sendAudioToTheQueue(File chunkFile) throws IOException {
-        audioMessageProducerStrategy.sendMessage(chunkFile);
+    private void sendAudioToTheQueue(File chunkFile, String videoId, String channelId) throws IOException {
+        audioMessageProducerStrategy.sendMessage(channelId, videoId, chunkFile);
     }
 
 }

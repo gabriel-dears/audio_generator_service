@@ -37,9 +37,10 @@ public class AudioGenerationFacade {
 
     public AudioGeneratorResponse executeAudioGeneration(AudioGeneratorRequest audioGeneratorRequest) {
         try {
-            LOGGER.info("Starting audio generation process for channel: {}", audioGeneratorRequest.getChannelId());
-            List<String> videoUrls = fetchVideoUrls(audioGeneratorRequest.getChannelId());
-            processVideos(videoUrls);
+            String channelId = audioGeneratorRequest.getChannelId();
+            LOGGER.info("Starting audio generation process for channel: {}", channelId);
+            List<String> videoUrls = fetchVideoUrls(channelId);
+            processVideos(videoUrls, channelId);
             LOGGER.info("Audio generation process completed successfully.");
             return new AudioGeneratorResponse("Audios processed successfully");
         } catch (Exception e) {
@@ -53,17 +54,17 @@ public class AudioGenerationFacade {
         return youTubeService.getChannelVideos(channelId);
     }
 
-    private void processVideos(List<String> videoUrls) throws IOException, InterruptedException {
+    private void processVideos(List<String> videoUrls, String channelId) throws IOException, InterruptedException {
         for (String videoUrl : videoUrls) {
-            processSingleVideo(videoUrl);
+            processSingleVideo(videoUrl, channelId);
         }
     }
 
-    private void processSingleVideo(String videoUrl) throws IOException, InterruptedException {
+    private void processSingleVideo(String videoUrl, String channelId) throws IOException, InterruptedException {
         String videoId = extractVideoId(videoUrl);
         if (isBaseFolderCreated(videoId)) {
             LOGGER.info("Processing audio for video ID: {}", videoId);
-            audioExecutionService.handleAudioExecution(videoUrl, videoId);
+            audioExecutionService.handleAudioExecution(videoUrl, videoId, channelId);
         } else {
             LOGGER.warn("Skipping audio processing for video ID: {} - Base folder creation failed.", videoId);
         }

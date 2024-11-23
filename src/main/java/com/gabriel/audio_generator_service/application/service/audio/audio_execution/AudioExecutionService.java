@@ -28,12 +28,12 @@ public class AudioExecutionService {
         this.audioDeletionService = audioDeletionService;
     }
 
-    public void handleAudioExecution(String videoUrl, String videoId) throws IOException, InterruptedException {
+    public void handleAudioExecution(String videoUrl, String videoId, String channelId) throws IOException, InterruptedException {
         if (isAudioDownloaded(videoUrl, videoId)) {
             CompletableFuture<CommandResult> commandResultCompletableFuture = processAndSplitAudio(videoId);
             if (commandResultCompletableFuture != null) {
                 commandResultCompletableFuture.thenRun(() -> {
-                    audioSubmissionService.submitAudio(videoId);
+                    audioSubmissionService.submitAudio(videoId, channelId);
                     audioDeletionService.addAudioToDelete(videoId);
                 }).join();
             }
