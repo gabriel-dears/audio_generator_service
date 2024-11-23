@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,6 +17,18 @@ public class RabbitConfig {
 
     public static final String QUEUE_NAME = "audio_queue";
     public static final String EXCHANGE_NAME = "audio_exchange";
+
+    @Value("${SPRING_RABBITMQ_HOST}")
+    private String rabbitHost;
+
+    @Value("${SPRING_RABBITMQ_PORT}")
+    private int rabbitPort;
+
+    @Value("${SPRING_RABBITMQ_USERNAME}")
+    private String rabbitUsername;
+
+    @Value("${SPRING_RABBITMQ_PASSWORD}")
+    private String rabbitPassword;
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
@@ -26,10 +39,10 @@ public class RabbitConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("rabbitmq");  // or your RabbitMQ host
-        connectionFactory.setPort(5672);  // default RabbitMQ port
-        connectionFactory.setUsername("user");
-        connectionFactory.setPassword("pass");
+        connectionFactory.setHost(rabbitHost);
+        connectionFactory.setPort(rabbitPort);
+        connectionFactory.setUsername(rabbitUsername);
+        connectionFactory.setPassword(rabbitPassword);
         return connectionFactory;
     }
 
