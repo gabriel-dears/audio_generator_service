@@ -2,7 +2,6 @@ package com.gabriel.audio_generator_service.domain.service.audio.audio_processin
 
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
-import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
 import com.gabriel.audio_generator_service.application.service.AudioProcessingStrategy;
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,20 +28,21 @@ public class DefaultAudioProcessingStrategy implements AudioProcessingStrategy {
     private String audioFormat;
 
     private final UrlGenerator urlGenerator;
+    private final ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner;
 
-    public DefaultAudioProcessingStrategy(UrlGenerator urlGenerator) {
+    public DefaultAudioProcessingStrategy(UrlGenerator urlGenerator, ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner) {
         this.urlGenerator = urlGenerator;
+        this.processBuilderSyncCommandRunner = processBuilderSyncCommandRunner;
     }
 
     @Override
     public boolean processAudio(String videoId) throws IOException, InterruptedException {
-        SyncCommandRunner syncCommandRunner = new ProcessBuilderSyncCommandRunner();
-        syncCommandRunner.directory(urlGenerator.getClipsUrlBasedOnVideoIdAsFile(videoId));
+        processBuilderSyncCommandRunner.directory(urlGenerator.getClipsUrlBasedOnVideoIdAsFile(videoId));
 
         String inputAudioFile = videoId + ".wav";
         String outputAudioFile = videoId + "_processed.wav";
 
-        syncCommandRunner.command(
+        processBuilderSyncCommandRunner.command(
                 ffmpegCommand,
                 "-i", inputAudioFile,
                 "-ar", String.valueOf(sampleRate),
@@ -55,7 +55,7 @@ public class DefaultAudioProcessingStrategy implements AudioProcessingStrategy {
                 "-y"
         );
 
-        CommandResult commandResult = syncCommandRunner.execute();
+        CommandResult commandResult = processBuilderSyncCommandRunner.execute();
         return commandResult.getExitCode() == 0;
     }
 }
