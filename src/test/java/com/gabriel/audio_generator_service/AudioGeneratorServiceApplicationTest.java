@@ -15,6 +15,6 @@ class AudioGeneratorServiceApplicationTests {
     @Test
     void shouldRunApplication() {
         // This test runs the main application class to ensure the application starts correctly.
-        AudioGeneratorServiceApplication.main(new String[] {});
+        AudioGeneratorServiceApplication.main(new String[]{});
     }
 }
