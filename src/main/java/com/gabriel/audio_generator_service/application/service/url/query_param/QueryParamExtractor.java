@@ -2,7 +2,6 @@ package com.gabriel.audio_generator_service.application.service.url.query_param;
 
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
