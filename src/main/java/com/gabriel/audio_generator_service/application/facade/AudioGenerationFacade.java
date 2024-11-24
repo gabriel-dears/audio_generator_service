@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Service
@@ -54,13 +55,13 @@ public class AudioGenerationFacade {
         return youTubeService.getChannelVideos(channelId);
     }
 
-    private void processVideos(List<String> videoUrls, String channelId) throws IOException, InterruptedException {
+    private void processVideos(List<String> videoUrls, String channelId) throws IOException, InterruptedException, URISyntaxException {
         for (String videoUrl : videoUrls) {
             processSingleVideo(videoUrl, channelId);
         }
     }
 
-    private void processSingleVideo(String videoUrl, String channelId) throws IOException, InterruptedException {
+    private void processSingleVideo(String videoUrl, String channelId) throws IOException, InterruptedException, URISyntaxException {
         String videoId = extractVideoId(videoUrl);
         if (isBaseFolderCreated(videoId)) {
             LOGGER.info("Processing audio for video ID: {}", videoId);
@@ -70,7 +71,7 @@ public class AudioGenerationFacade {
         }
     }
 
-    private String extractVideoId(String videoUrl) {
+    private String extractVideoId(String videoUrl) throws URISyntaxException {
         LOGGER.info("Extracting video ID from URL: {}", videoUrl);
         return urlExtractorService.getVideoId(videoUrl);
     }

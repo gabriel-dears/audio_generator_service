@@ -3,6 +3,7 @@ package com.gabriel.audio_generator_service.application.service.url.url_extracto
 import com.gabriel.audio_generator_service.application.service.url.query_param.QueryParamExtractor;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
 import java.util.Map;
 
 @Service
@@ -14,7 +15,7 @@ public class UrlExtractorService {
         this.queryParamExtractor = queryParamExtractor;
     }
 
-    public String getVideoId(String videoUrl) {
+    public String getVideoId(String videoUrl) throws URISyntaxException {
         Map<String, String> queryParams = queryParamExtractor.getQueryParams(videoUrl);
         return queryParams.get("v");
     }
