@@ -8,15 +8,17 @@ import com.gabriel.audio_generator_service.application.service.audio.audio_split
 import com.gabriel.audio_generator_service.application.service.audio.audio_submission.AudioSubmissionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AudioExecutionServiceTest {
 
     @Mock
@@ -46,7 +48,6 @@ class AudioExecutionServiceTest {
         videoUrl = "https://example.com/video";
         videoId = "video123";
         channelId = "channel123";
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
