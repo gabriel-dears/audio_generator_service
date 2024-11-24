@@ -20,6 +20,6 @@ public class VideoUrlExtractor {
     }
 
     private String getFullYoutubeUrl(SearchResult video) {
-        return String.format("%s%s", YoutubeConstants.YOUTUBE_URL, video.getSnippet().getTitle());
+        return String.format("%s%s", YoutubeConstants.YOUTUBE_URL, video.getId().getVideoId());
     }
 }

@@ -2,7 +2,6 @@ package com.gabriel.audio_generator_service.application.command_runner.folder.fo
 
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
-import com.gabriel.audio_generator_service.application.command_runner.SyncCommandRunner;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,13 +10,17 @@ import java.io.IOException;
 @Service
 public class FolderCreatorServiceImpl implements FolderCreatorService {
 
-    private final SyncCommandRunner syncCommandRunner = new ProcessBuilderSyncCommandRunner();
+    private final ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner;
 
     private String folderName;
 
+    public FolderCreatorServiceImpl(ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner) {
+        this.processBuilderSyncCommandRunner = processBuilderSyncCommandRunner;
+    }
+
     @Override
     public FolderCreatorService setBaseDirectory(File baseDirectory) {
-        syncCommandRunner.directory(baseDirectory);
+        processBuilderSyncCommandRunner.directory(baseDirectory);
         return this;
     }
 
@@ -29,8 +32,8 @@ public class FolderCreatorServiceImpl implements FolderCreatorService {
 
     @Override
     public CommandResult run() throws IOException, InterruptedException {
-        syncCommandRunner.command("mkdir", "-p", folderName);
-        return syncCommandRunner.execute();
+        processBuilderSyncCommandRunner.command("mkdir", "-p", folderName);
+        return processBuilderSyncCommandRunner.execute();
     }
 
 }

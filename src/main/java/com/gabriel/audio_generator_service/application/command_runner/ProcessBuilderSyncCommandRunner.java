@@ -1,14 +1,20 @@
 package com.gabriel.audio_generator_service.application.command_runner;
 
+import com.gabriel.audio_generator_service.application.process.ProcessExecutor;
+import com.gabriel.audio_generator_service.application.process.ProcessHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 
 @Service
-public class ProcessBuilderSyncCommandRunner implements SyncCommandRunner {
+public class ProcessBuilderSyncCommandRunner extends BaseCommandRunner implements SyncCommandRunner {
     private String[] command;
     private File directory;
+
+    public ProcessBuilderSyncCommandRunner(ProcessExecutor processExecutor) {
+        super(processExecutor);
+    }
 
     @Override
     public CommandRunner command(String... command) {
@@ -24,20 +30,8 @@ public class ProcessBuilderSyncCommandRunner implements SyncCommandRunner {
 
     @Override
     public CommandResult execute() throws IOException, InterruptedException {
-        Process process = getProcess();
-        int exitCode = process.waitFor();
-        String output = new String(process.getInputStream().readAllBytes());
-        String errorOutput = new String(process.getErrorStream().readAllBytes());
-
-        return new CommandResult(exitCode, output, errorOutput);
+        Process process = getProcess(command, directory);
+        return ProcessHandler.handleProcess(process);
     }
 
-    private Process getProcess() throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        if (directory != null) {
-            processBuilder.directory(directory);
-        }
-        processBuilder.inheritIO();
-        return processBuilder.start();
-    }
 }

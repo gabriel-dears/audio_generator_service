@@ -1,8 +1,8 @@
 package com.gabriel.audio_generator_service.infrastructure.service.youtube;
 
+import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.SearchResultSnippet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,18 +23,18 @@ class VideoUrlExtractorTest {
     private SearchResult searchResult;
 
     @Mock
-    private SearchResultSnippet searchResultSnippet;
+    private ResourceId resourceId;
 
     @Test
     void shouldContainVideosExtractedFromResponse() {
-        when(searchResult.getSnippet()).thenReturn(searchResultSnippet);
-        when(searchResultSnippet.getTitle()).thenReturn("Testing Title From Youtube Api");
+        when(searchResult.getId()).thenReturn(resourceId);
+        when(resourceId.getVideoId()).thenReturn("RANDOM_VIDEO_ID");
         when(searchListResponse.getItems()).thenReturn(List.of(searchResult));
 
         VideoUrlExtractor videoUrlExtractor = new VideoUrlExtractor();
         List<String> strings = videoUrlExtractor.extractVideoUrls(searchListResponse);
 
         assertThat(strings.size()).isEqualTo(1);
-        assertThat(strings).contains("https://www.youtube.com/watch?v=Testing Title From Youtube Api");
+        assertThat(strings).contains("https://www.youtube.com/watch?v=RANDOM_VIDEO_ID");
     }
 }
