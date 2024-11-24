@@ -12,6 +12,17 @@ import java.io.IOException;
 
 @Service
 public class Base64StringAudioMessageProducerStrategy implements AudioMessageProducerStrategy {
+
+    private final RabbitTemplate rabbitTemplate;
+    private final String exchange;
+    private final String routingKey;
+
+    public Base64StringAudioMessageProducerStrategy(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.exchange = "audio_exchange";       // Replace with actual exchange name
+        this.routingKey = "audio.routing.key";  // Replace with actual routing key
+    }
+
     @Override
     public void sendMessage(String channelId, String videoId, Object audioChunk) throws IOException {
         if (audioChunk instanceof File audioChunkFile) {
@@ -28,18 +39,7 @@ public class Base64StringAudioMessageProducerStrategy implements AudioMessagePro
         return FileConverter.fileToBase64(audioChunkFile);
     }
 
-    private final RabbitTemplate rabbitTemplate;
-    private final String exchange;
-    private final String routingKey;
-
-    @Autowired
-    public Base64StringAudioMessageProducerStrategy(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.exchange = "audio_exchange";       // Replace with actual exchange name
-        this.routingKey = "audio.routing.key";  // Replace with actual routing key
-    }
-
-    public void sendStringMessage(String channelId, String videoId, String base64Chunk) {
+    private void sendStringMessage(String channelId, String videoId, String base64Chunk) {
         AudioChunkMessage audioChunkMessage = new AudioChunkMessage(channelId, videoId, base64Chunk);
         rabbitTemplate.convertAndSend(exchange, routingKey, audioChunkMessage);
         System.out.println("Sent message: " + audioChunkMessage);
