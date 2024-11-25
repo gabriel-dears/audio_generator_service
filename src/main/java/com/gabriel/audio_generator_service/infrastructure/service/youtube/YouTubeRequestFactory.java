@@ -15,12 +15,21 @@ public class YouTubeRequestFactory {
         this.youtube = youtube;
     }
 
-    public YouTube.Search.List createSearchRequest(String channelId, String youtubeApiKey) throws IOException {
-        YouTube.Search.List request = youtube.search().list(List.of("id", "snippet"));
+    public YouTube.Search.List createSearchVideosByChannelRequest(String channelId, String youtubeApiKey) throws IOException {
+        YouTube.Search.List request = youtube.search().list(List.of("id", "snippet", "contentDetails", "statistics"));
         request.setChannelId(channelId);
         request.setMaxResults(10L);
         request.setOrder("date");
         request.setKey(youtubeApiKey);
         return request;
     }
+
+    public YouTube.Videos.List createVideoDetailsByVideosRequest(List<String> videoIds, String youtubeApiKey) throws IOException {
+        YouTube.Videos.List request = youtube.videos().list(List.of("snippet", "contentDetails", "statistics"));
+        request.setId(videoIds); // Pass video IDs here
+        request.setKey(youtubeApiKey);
+        return request;
+    }
+
+
 }

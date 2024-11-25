@@ -2,6 +2,7 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_subm
 
 import com.gabriel.audio_generator_service.application.service.AudioMessageProducerStrategy;
 import com.gabriel.audio_generator_service.application.service.audio.file.AudioFilesConverter;
+import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +28,7 @@ class AudioSubmissionServiceTest {
 
     private final String videoId = "video123";
     private final String channelId = "channel456";
+    private final VideoDetails videoDetails = new VideoDetails(videoId, null, null, channelId);
 
     @Test
     void shouldSubmitAllAudioChunksToQueue() throws IOException {
@@ -35,11 +37,11 @@ class AudioSubmissionServiceTest {
         when(audioFilesConverter.getAsFileArray(videoId)).thenReturn(mockFiles);
 
         // Act
-        audioSubmissionService.submitAudio(videoId, channelId);
+        audioSubmissionService.submitAudio(videoDetails);
 
         // Assert
         for (File file : mockFiles) {
-            verify(audioMessageProducerStrategy).sendMessage(channelId, videoId, file);
+            verify(audioMessageProducerStrategy).sendMessage(videoDetails, file);
         }
     }
 
@@ -48,13 +50,13 @@ class AudioSubmissionServiceTest {
         // Arrange
         File[] mockFiles = {mock(File.class)};
         when(audioFilesConverter.getAsFileArray(videoId)).thenReturn(mockFiles);
-        doThrow(new IOException("Test exception")).when(audioMessageProducerStrategy).sendMessage(anyString(), anyString(), any(File.class));
+        doThrow(new IOException("Test exception")).when(audioMessageProducerStrategy).sendMessage(any(), any(File.class));
 
         // Act
-        audioSubmissionService.submitAudio(videoId, channelId);
+        audioSubmissionService.submitAudio(videoDetails);
 
         // Assert
-        verify(audioMessageProducerStrategy).sendMessage(channelId, videoId, mockFiles[0]);
+        verify(audioMessageProducerStrategy).sendMessage(videoDetails, mockFiles[0]);
         // Ensure no further interactions when an exception occurs
         verifyNoMoreInteractions(audioMessageProducerStrategy);
     }
@@ -65,9 +67,9 @@ class AudioSubmissionServiceTest {
         when(audioFilesConverter.getAsFileArray(videoId)).thenReturn(new File[0]);
 
         // Act
-        audioSubmissionService.submitAudio(videoId, channelId);
+        audioSubmissionService.submitAudio(videoDetails);
 
         // Assert
-        verify(audioMessageProducerStrategy, never()).sendMessage(anyString(), anyString(), any(File.class));
+        verify(audioMessageProducerStrategy, never()).sendMessage(any(), any(File.class));
     }
 }

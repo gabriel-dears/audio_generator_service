@@ -42,7 +42,7 @@ class AudioDownloadServiceTest {
         when(processBuilderSyncCommandRunner.execute()).thenReturn(commandResult);
 
         // Call the method under test
-        boolean result = audioDownloadService.downloadAudio(videoUrl, videoId);
+        boolean result = audioDownloadService.downloadAudio(videoId);
 
         // Assert that the result is true (successful download)
         assertTrue(result);
@@ -74,7 +74,7 @@ class AudioDownloadServiceTest {
         when(processBuilderSyncCommandRunner.execute()).thenReturn(commandResult);
 
         // Call the method under test
-        boolean result = audioDownloadService.downloadAudio(videoUrl, videoId);
+        boolean result = audioDownloadService.downloadAudio(videoId);
 
         // Assert that the result is false (failed download)
         assertFalse(result);
@@ -107,7 +107,7 @@ class AudioDownloadServiceTest {
         // Call the method under test and assert that the exception is thrown
         boolean result = false;
         try {
-            result = audioDownloadService.downloadAudio(videoUrl, videoId);
+            result = audioDownloadService.downloadAudio(videoId);
         } catch (IOException e) {
             assertFalse(result);
             assertTrue(e.getMessage().contains("Command failed"));
@@ -141,7 +141,7 @@ class AudioDownloadServiceTest {
         // Call the method under test and assert that the exception is thrown
         boolean result = false;
         try {
-            result = audioDownloadService.downloadAudio(videoUrl, videoId);
+            result = audioDownloadService.downloadAudio(videoId);
         } catch (InterruptedException e) {
             assertFalse(result);
             assertTrue(e.getMessage().contains("Command interrupted"));

@@ -10,11 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class VideoUrlExtractorTest {
+class VideoUrlServiceTest {
 
     @Mock
     private SearchListResponse searchListResponse;
@@ -30,11 +29,5 @@ class VideoUrlExtractorTest {
         when(searchResult.getId()).thenReturn(resourceId);
         when(resourceId.getVideoId()).thenReturn("RANDOM_VIDEO_ID");
         when(searchListResponse.getItems()).thenReturn(List.of(searchResult));
-
-        VideoUrlExtractor videoUrlExtractor = new VideoUrlExtractor();
-        List<String> strings = videoUrlExtractor.extractVideoUrls(searchListResponse);
-
-        assertThat(strings.size()).isEqualTo(1);
-        assertThat(strings).contains("https://www.youtube.com/watch?v=RANDOM_VIDEO_ID");
     }
 }

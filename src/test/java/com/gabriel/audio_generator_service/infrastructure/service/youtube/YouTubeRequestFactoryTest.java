@@ -32,7 +32,7 @@ class YouTubeRequestFactoryTest {
         when(youtube.search()).thenReturn(youtubeSearch);
         when(youtubeSearch.list(any())).thenReturn(youtubeSearchList);
 
-        youTubeRequestFactory.createSearchRequest(channelId, youtubeApiKey);
+        youTubeRequestFactory.createSearchVideosByChannelRequest(channelId, youtubeApiKey);
     }
 
 }

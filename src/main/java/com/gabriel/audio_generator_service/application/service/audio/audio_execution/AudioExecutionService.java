@@ -6,6 +6,7 @@ import com.gabriel.audio_generator_service.application.service.audio.audio_delet
 import com.gabriel.audio_generator_service.application.service.audio.audio_download.AudioDownloadService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_splitting.AudioSplittingService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_submission.AudioSubmissionService;
+import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,20 +29,20 @@ public class AudioExecutionService {
         this.audioDeletionService = audioDeletionService;
     }
 
-    public void handleAudioExecution(String videoUrl, String videoId, String channelId) throws IOException, InterruptedException {
-        if (isAudioDownloaded(videoUrl, videoId)) {
-            CompletableFuture<CommandResult> commandResultCompletableFuture = processAndSplitAudio(videoId);
+    public void handleAudioExecution(VideoDetails videoDetails) throws IOException, InterruptedException {
+        if (isAudioDownloaded(videoDetails.videoId())) {
+            CompletableFuture<CommandResult> commandResultCompletableFuture = processAndSplitAudio(videoDetails.videoId());
             if (commandResultCompletableFuture != null) {
                 commandResultCompletableFuture.thenRun(() -> {
-                    audioSubmissionService.submitAudio(videoId, channelId);
-                    audioDeletionService.addAudioToDelete(videoId);
+                    audioSubmissionService.submitAudio(videoDetails);
+                    audioDeletionService.addAudioToDelete(videoDetails.videoId());
                 }).join();
             }
         }
     }
 
-    private boolean isAudioDownloaded(String videoUrl, String videoId) throws IOException, InterruptedException {
-        return audioDownloadService.downloadAudio(videoUrl, videoId);
+    private boolean isAudioDownloaded(String videoId) throws IOException, InterruptedException {
+        return audioDownloadService.downloadAudio(videoId);
     }
 
     private CompletableFuture<CommandResult> processAndSplitAudio(String videoId) throws IOException, InterruptedException {

@@ -1,5 +1,6 @@
 package com.gabriel.audio_generator_service.application.service.messaging.audio;
 
+import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import com.gabriel.audio_generator_service.infrastructure.utils.FileConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,23 +27,25 @@ class Base64StringAudioMessageProducerStrategyTest {
     @Mock
     private File mockFile;
 
+    private final String channelId = "channel123";
+    private final String videoId = "video123";
+
+    private final VideoDetails videoDetails = new VideoDetails(videoId, null, null, channelId);
+
     @Test
     void shouldSendBase64MessageSuccessfully() throws IOException {
         try (MockedStatic<FileConverter> mockedFileConverter = mockStatic(FileConverter.class)) {
-            String channelId = "channel123";
-            String videoId = "video123";
+
             mockedFileConverter.when(() -> FileConverter.fileToBase64(mockFile)).thenReturn("base64String");
-            base64StringAudioMessageProducerStrategy.sendMessage(channelId, videoId, mockFile);
+            base64StringAudioMessageProducerStrategy.sendMessage(videoDetails, mockFile);
         }
     }
 
     @Test
     void shouldNotSendBase64MessageWhenFileIsNull() throws IOException {
         try (MockedStatic<FileConverter> mockedFileConverter = mockStatic(FileConverter.class)) {
-            String channelId = "channel123";
-            String videoId = "video123";
             mockedFileConverter.when(() -> FileConverter.fileToBase64(mockFile)).thenReturn("base64String");
-            base64StringAudioMessageProducerStrategy.sendMessage(channelId, videoId, null);
+            base64StringAudioMessageProducerStrategy.sendMessage(videoDetails, null);
         }
     }
 

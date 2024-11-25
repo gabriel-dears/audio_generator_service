@@ -3,6 +3,7 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_down
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
+import com.gabriel.audio_generator_service.infrastructure.service.youtube.VideoUrlService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -12,13 +13,16 @@ public class AudioDownloadService {
 
     private final UrlGenerator urlGenerator;
     private final ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner;
+    private final VideoUrlService videoUrlService;
 
-    public AudioDownloadService(UrlGenerator urlGenerator, ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner) {
+    public AudioDownloadService(UrlGenerator urlGenerator, ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner, VideoUrlService videoUrlService) {
         this.urlGenerator = urlGenerator;
         this.processBuilderSyncCommandRunner = processBuilderSyncCommandRunner;
+        this.videoUrlService = videoUrlService;
     }
 
-    public boolean downloadAudio(String videoUrl, String videoId) throws IOException, InterruptedException {
+    public boolean downloadAudio(String videoId) throws IOException, InterruptedException {
+        String videoUrl = videoUrlService.getFullYoutubeUrl(videoId);
         processBuilderSyncCommandRunner.directory(urlGenerator.getClipsUrlBasedOnVideoIdAsFile(videoId));
         processBuilderSyncCommandRunner.command(
                 "yt-dlp",

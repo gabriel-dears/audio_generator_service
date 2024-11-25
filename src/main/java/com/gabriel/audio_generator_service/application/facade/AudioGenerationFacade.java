@@ -6,12 +6,12 @@ import com.gabriel.audio_generator_service.application.service.audio.audio_base_
 import com.gabriel.audio_generator_service.application.service.audio.audio_execution.AudioExecutionService;
 import com.gabriel.audio_generator_service.application.service.url.url_extractor.UrlExtractorService;
 import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
+import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @Service
@@ -40,8 +40,9 @@ public class AudioGenerationFacade {
         try {
             String channelId = audioGeneratorRequest.getChannelId();
             LOGGER.info("Starting audio generation process for channel: {}", channelId);
-            List<String> videoUrls = fetchVideoUrls(channelId);
-            processVideos(videoUrls, channelId);
+            List<String> videosIds = fetchVideosIds(channelId);
+            List<VideoDetails> videosDetails = youTubeService.getVideosDetails(videosIds);
+            processVideos(videosDetails);
             LOGGER.info("Audio generation process completed successfully.");
             return new AudioGeneratorResponse("Audios processed successfully");
         } catch (Exception e) {
@@ -50,30 +51,24 @@ public class AudioGenerationFacade {
         }
     }
 
-    private List<String> fetchVideoUrls(String channelId) throws IOException {
+    private List<String> fetchVideosIds(String channelId) throws IOException {
         LOGGER.info("Fetching video URLs for channel ID: {}", channelId);
-        return youTubeService.getChannelVideos(channelId);
+        return youTubeService.getChannelVideosIds(channelId);
     }
 
-    private void processVideos(List<String> videoUrls, String channelId) throws IOException, InterruptedException, URISyntaxException {
-        for (String videoUrl : videoUrls) {
-            processSingleVideo(videoUrl, channelId);
+    private void processVideos(List<VideoDetails> videoDetailsList) throws IOException, InterruptedException {
+        for (VideoDetails videoDetails : videoDetailsList) {
+            processSingleVideo(videoDetails);
         }
     }
 
-    private void processSingleVideo(String videoUrl, String channelId) throws IOException, InterruptedException, URISyntaxException {
-        String videoId = extractVideoId(videoUrl);
-        if (isBaseFolderCreated(videoId)) {
-            LOGGER.info("Processing audio for video ID: {}", videoId);
-            audioExecutionService.handleAudioExecution(videoUrl, videoId, channelId);
+    private void processSingleVideo(VideoDetails videoDetails) throws IOException, InterruptedException {
+        if (isBaseFolderCreated(videoDetails.videoId())) {
+            LOGGER.info("Processing audio for video ID: {}", videoDetails);
+            audioExecutionService.handleAudioExecution(videoDetails);
         } else {
-            LOGGER.warn("Skipping audio processing for video ID: {} - Base folder creation failed.", videoId);
+            LOGGER.warn("Skipping audio processing for video ID: {} - Base folder creation failed.", videoDetails);
         }
-    }
-
-    private String extractVideoId(String videoUrl) throws URISyntaxException {
-        LOGGER.info("Extracting video ID from URL: {}", videoUrl);
-        return urlExtractorService.getVideoId(videoUrl);
     }
 
     private boolean isBaseFolderCreated(String videoId) throws IOException, InterruptedException {
