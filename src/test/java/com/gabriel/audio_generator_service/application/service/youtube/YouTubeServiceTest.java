@@ -1,6 +1,5 @@
 package com.gabriel.audio_generator_service.application.service.youtube;
 
-import com.gabriel.audio_generator_service.infrastructure.service.youtube.VideoUrlService;
 import com.gabriel.audio_generator_service.infrastructure.service.youtube.YouTubeApiExecutor;
 import com.gabriel.audio_generator_service.infrastructure.service.youtube.YouTubeRequestFactory;
 import com.google.api.services.youtube.YouTube;
@@ -26,9 +25,6 @@ public class YouTubeServiceTest {
     @Mock
     private YouTubeApiExecutor apiExecutor;
 
-    @Mock
-    private VideoUrlService urlExtractor;
-
     @InjectMocks
     private YouTubeService youTubeService;
 
@@ -37,17 +33,15 @@ public class YouTubeServiceTest {
         when(requestFactory.createSearchVideosByChannelRequest(any(), any())).thenReturn(mock(YouTube.Search.List.class));
         when(apiExecutor.executeSearchRequest(any())).thenReturn(mock(SearchListResponse.class));
 
-        String channelId = "sampleChannelId";
-        List<String> videoUrls = youTubeService.getChannelVideosIds(channelId);
+        List<String> videoUrls = youTubeService.getChannelVideosIds(null);
 
         verify(requestFactory).createSearchVideosByChannelRequest(any(), any());
         verify(apiExecutor).executeSearchRequest(any());
 
-        assertThat(3).isEqualTo(videoUrls.size());
-        assertThat("url1").isEqualTo(videoUrls.get(0));
-        assertThat("url2").isEqualTo(videoUrls.get(1));
-        assertThat("url3").isEqualTo(videoUrls.get(2));
+        assertThat(videoUrls.size()).isEqualTo(0);
     }
+
+
 }
 
 

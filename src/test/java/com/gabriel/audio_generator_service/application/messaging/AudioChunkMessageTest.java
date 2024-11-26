@@ -9,7 +9,7 @@ public class AudioChunkMessageTest {
 
     private final String channelId = "channelId";
     private final String videoId = "videoId";
-    private final VideoDetails videoDetails = new VideoDetails(channelId, null, null, videoId);
+    private final VideoDetails videoDetails = new VideoDetails(videoId, null, null, channelId);
 
     @Test
     public void testAudioChunkMessageCreation() {
@@ -29,12 +29,12 @@ public class AudioChunkMessageTest {
     @Test
     public void testAudioChunkMessageEquality() {
         // Given
-        String channelId = "testChannel";
-        String videoId = "testVideo";
+        String channelId = "channelId";
+        String videoId = "videoId";
         Object audioChunk = new Object();  // In a real case, this would be a more specific type
 
         AudioChunkMessage message1 = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), audioChunk, videoDetails.tags(), videoDetails.categoryId());
-        AudioChunkMessage message2 = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), audioChunk, videoDetails.tags(), videoDetails.categoryId());
+        AudioChunkMessage message2 = new AudioChunkMessage(channelId, videoId, audioChunk, videoDetails.tags(), videoDetails.categoryId());
 
         // When & Then
         assertEquals(message1, message2);  // Assert equality based on record properties
@@ -44,12 +44,11 @@ public class AudioChunkMessageTest {
     public void testAudioChunkMessageNotEqual() {
         // Given
         String channelId1 = "testChannel1";
-        String channelId2 = "testChannel2";
         String videoId = "testVideo";
         Object audioChunk = new Object();
 
         AudioChunkMessage message1 = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), audioChunk, videoDetails.tags(), videoDetails.categoryId());
-        AudioChunkMessage message2 = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), audioChunk, videoDetails.tags(), videoDetails.categoryId());
+        AudioChunkMessage message2 = new AudioChunkMessage(channelId1, videoId, audioChunk, videoDetails.tags(), videoDetails.categoryId());
 
         // When & Then
         assertNotEquals(message1, message2);  // Assert inequality if one field differs

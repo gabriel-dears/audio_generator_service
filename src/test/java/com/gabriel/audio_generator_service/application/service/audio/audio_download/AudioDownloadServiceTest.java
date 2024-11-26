@@ -3,6 +3,7 @@ package com.gabriel.audio_generator_service.application.service.audio.audio_down
 import com.gabriel.audio_generator_service.application.command_runner.CommandResult;
 import com.gabriel.audio_generator_service.application.command_runner.ProcessBuilderSyncCommandRunner;
 import com.gabriel.audio_generator_service.application.service.url.url_generator.UrlGenerator;
+import com.gabriel.audio_generator_service.infrastructure.service.youtube.VideoUrlService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,9 @@ class AudioDownloadServiceTest {
     @Mock
     private ProcessBuilderSyncCommandRunner processBuilderSyncCommandRunner;
 
+    @Mock
+    private VideoUrlService videoUrlService;
+
     @InjectMocks
     private AudioDownloadService audioDownloadService;
 
@@ -40,6 +44,8 @@ class AudioDownloadServiceTest {
         // Mock the command execution to simulate success
         CommandResult commandResult = new CommandResult(0, "Success", "");
         when(processBuilderSyncCommandRunner.execute()).thenReturn(commandResult);
+
+        when(videoUrlService.getFullYoutubeUrl(anyString())).thenReturn(videoUrl);
 
         // Call the method under test
         boolean result = audioDownloadService.downloadAudio(videoId);
@@ -73,6 +79,8 @@ class AudioDownloadServiceTest {
         CommandResult commandResult = new CommandResult(1, "", "Error");
         when(processBuilderSyncCommandRunner.execute()).thenReturn(commandResult);
 
+        when(videoUrlService.getFullYoutubeUrl(anyString())).thenReturn(videoUrl);
+
         // Call the method under test
         boolean result = audioDownloadService.downloadAudio(videoId);
 
@@ -103,6 +111,8 @@ class AudioDownloadServiceTest {
 
         // Simulate an IOException when trying to execute the command
         when(processBuilderSyncCommandRunner.execute()).thenThrow(new IOException("Command failed"));
+
+        when(videoUrlService.getFullYoutubeUrl(anyString())).thenReturn(videoUrl);
 
         // Call the method under test and assert that the exception is thrown
         boolean result = false;
@@ -137,6 +147,8 @@ class AudioDownloadServiceTest {
 
         // Simulate an InterruptedException when trying to execute the command
         when(processBuilderSyncCommandRunner.execute()).thenThrow(new InterruptedException("Command interrupted"));
+
+        when(videoUrlService.getFullYoutubeUrl(anyString())).thenReturn(videoUrl);
 
         // Call the method under test and assert that the exception is thrown
         boolean result = false;
