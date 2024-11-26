@@ -14,6 +14,21 @@ This service plays a vital role in ensuring accurate audio chunking, enabling th
 
 ---
 
+## Usage
+
+### Prerequisites
+
+- **Java 17+** installed.
+- **RabbitMQ server** running and configured with the specified exchange, queue, and binding:
+    - **Exchange Name:** `audio_exchange`
+    - **Queue Name:** `audio_queue`
+    - **Routing Key:** `audio.routing.key`
+- **yt-dlp** installed on the host machine. You can install it with:
+  ```bash
+  pip install yt-dlp
+
+---
+
 ## RabbitMQ Integration
 
 The service uses RabbitMQ to send audio chunk messages to the `transcription_service`.
@@ -35,6 +50,8 @@ public record AudioChunkMessage(
     String category
 ) implements Serializable {}
 ```
+
+---
 
 ## How It Fits Into the NURA Project
 
