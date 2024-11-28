@@ -4,7 +4,6 @@ import com.gabriel.audio_generator_service.application.dto.AudioGeneratorRequest
 import com.gabriel.audio_generator_service.application.dto.AudioGeneratorResponse;
 import com.gabriel.audio_generator_service.application.service.audio.audio_base_folder_creator.AudioBaseFolderCreatorService;
 import com.gabriel.audio_generator_service.application.service.audio.audio_execution.AudioExecutionService;
-import com.gabriel.audio_generator_service.application.service.url.url_extractor.UrlExtractorService;
 import com.gabriel.audio_generator_service.application.service.youtube.YouTubeService;
 import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import org.slf4j.Logger;
@@ -21,18 +20,15 @@ public class AudioGenerationFacade {
 
     private final YouTubeService youTubeService;
     private final AudioExecutionService audioExecutionService;
-    private final UrlExtractorService urlExtractorService;
     private final AudioBaseFolderCreatorService audioBaseFolderCreatorService;
 
     public AudioGenerationFacade(
             YouTubeService youTubeService,
             AudioExecutionService audioExecutionService,
-            UrlExtractorService urlExtractorService,
             AudioBaseFolderCreatorService audioBaseFolderCreatorService
     ) {
         this.youTubeService = youTubeService;
         this.audioExecutionService = audioExecutionService;
-        this.urlExtractorService = urlExtractorService;
         this.audioBaseFolderCreatorService = audioBaseFolderCreatorService;
     }
 
