@@ -16,7 +16,7 @@ public class YouTubeRequestFactory {
     }
 
     public YouTube.Search.List createSearchVideosByChannelRequest(String channelId, String youtubeApiKey) throws IOException {
-        YouTube.Search.List request = youtube.search().list(List.of("id", "snippet", "contentDetails", "statistics"));
+        YouTube.Search.List request = youtube.search().list(List.of("id", "snippet"));
         request.setChannelId(channelId);
         request.setMaxResults(10L);
         request.setOrder("date");
