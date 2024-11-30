@@ -3,6 +3,7 @@ package com.gabriel.audio_generator_service.application.service.youtube;
 import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import com.gabriel.audio_generator_service.infrastructure.service.youtube.YouTubeApiExecutor;
 import com.gabriel.audio_generator_service.infrastructure.service.youtube.YouTubeRequestFactory;
+import com.gabriel.audio_generator_service.infrastructure.utils.ListUtils;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
@@ -45,7 +46,7 @@ public class YouTubeService {
     }
 
     private static VideoDetails getVideoDetails(Video item) {
-        return new VideoDetails(item.getId(), item.getSnippet().getTags(), item.getSnippet().getCategoryId(), item.getSnippet().getChannelId());
+        return new VideoDetails(item.getId(), ListUtils.getEmptyListFromNullList(item.getSnippet().getTags()), item.getSnippet().getCategoryId(), item.getSnippet().getChannelId());
     }
 
 
