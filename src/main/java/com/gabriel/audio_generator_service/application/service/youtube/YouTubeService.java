@@ -31,13 +31,13 @@ public class YouTubeService {
 
     public List<String> getChannelVideosIds(String channelId) throws IOException {
         var request = requestFactory.createSearchVideosByChannelRequest(channelId, youtubeApiKey);
-        var response = apiExecutor.executeSearchRequest(request);
+        var response = apiExecutor.executeSearchVideosByChannel(request);
         return getVideoIdsList(response);
     }
 
     public List<VideoDetails> getVideosDetails(List<String> videoIdList) throws IOException {
         YouTube.Videos.List request = requestFactory.createVideoDetailsByVideosRequest(videoIdList, youtubeApiKey);
-        var response = request.execute();
+        var response = apiExecutor.executeSearchVideoDetailsByVideo(request);
         return getVideoDetailsList(response);
     }
 

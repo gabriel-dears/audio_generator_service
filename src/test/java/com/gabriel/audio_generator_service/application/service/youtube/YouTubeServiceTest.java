@@ -31,12 +31,12 @@ public class YouTubeServiceTest {
     @Test
     public void testGetChannelVideosIds() throws IOException {
         when(requestFactory.createSearchVideosByChannelRequest(any(), any())).thenReturn(mock(YouTube.Search.List.class));
-        when(apiExecutor.executeSearchRequest(any())).thenReturn(mock(SearchListResponse.class));
+        when(apiExecutor.executeSearchVideosByChannel(any())).thenReturn(mock(SearchListResponse.class));
 
         List<String> videoUrls = youTubeService.getChannelVideosIds(null);
 
         verify(requestFactory).createSearchVideosByChannelRequest(any(), any());
-        verify(apiExecutor).executeSearchRequest(any());
+        verify(apiExecutor).executeSearchVideosByChannel(any());
 
         assertThat(videoUrls.size()).isEqualTo(0);
     }

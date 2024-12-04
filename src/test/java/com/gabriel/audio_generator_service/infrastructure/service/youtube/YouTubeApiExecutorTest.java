@@ -23,7 +23,7 @@ class YouTubeApiExecutorTest {
         when(request.execute()).thenReturn(searchListResponse);
 
         YouTubeApiExecutor executor = new YouTubeApiExecutor();
-        SearchListResponse searchListResponseAfterExecuting = executor.executeSearchRequest(request);
+        SearchListResponse searchListResponseAfterExecuting = executor.executeSearchVideosByChannel(request);
         assertThat(searchListResponse).isNotNull();
         assertThat(searchListResponseAfterExecuting.getItems()).hasSize(1);
         assertThat(searchListResponseAfterExecuting.getItems().get(0)).isEqualTo(searchListResponse.getItems().get(0));
