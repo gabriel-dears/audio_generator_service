@@ -31,5 +31,14 @@ public class YouTubeRequestFactory {
         return request;
     }
 
+    public YouTube.VideoCategories.List createVideoCategoriesRequest(String categoryId, String youtubeApiKey) throws IOException {
+        // Fetch details of a specific video category by its ID
+        YouTube.VideoCategories.List request = youtube.videoCategories().list(List.of("snippet"));
+        request.setId(List.of(categoryId));
+        request.setKey(youtubeApiKey);
+        request.setHl("pt");
+        return request;
+    }
+
 
 }

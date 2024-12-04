@@ -7,6 +7,7 @@ import com.gabriel.audio_generator_service.infrastructure.utils.ListUtils;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoCategory;
 import com.google.api.services.youtube.model.VideoListResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,26 @@ public class YouTubeService {
         return getVideoDetailsList(response);
     }
 
-    private static List<VideoDetails> getVideoDetailsList(VideoListResponse response) {
-        return response.getItems().stream().map(YouTubeService::getVideoDetails).toList();
+    public String getCategoryNameById(String categoryId) throws IOException {
+        var videoCategoriesRequest = requestFactory.createVideoCategoriesRequest(categoryId, youtubeApiKey);
+        var videoCategoryListResponse = apiExecutor.executeSearchCategoryDetailsByCategory(videoCategoriesRequest);
+        List<VideoCategory> categoryItemsResponseList = ListUtils.getEmptyListFromNullList(videoCategoryListResponse.getItems());
+        if (!categoryItemsResponseList.isEmpty()) {
+            return categoryItemsResponseList.get(0).getSnippet().getTitle();
+        }
+        return "";
     }
 
-    private static VideoDetails getVideoDetails(Video item) {
-        return new VideoDetails(item.getId(), ListUtils.getEmptyListFromNullList(item.getSnippet().getTags()), item.getSnippet().getCategoryId(), item.getSnippet().getChannelId());
+    private List<VideoDetails> getVideoDetailsList(VideoListResponse response) {
+        return response.getItems().stream().map(this::getVideoDetails).toList();
+    }
+
+    private VideoDetails getVideoDetails(Video item) {
+        try {
+            return new VideoDetails(item.getId(), ListUtils.getEmptyListFromNullList(item.getSnippet().getTags()), getCategoryNameById(item.getSnippet().getCategoryId()), item.getSnippet().getChannelId());
+        } catch (IOException e) {
+            return new VideoDetails(item.getId(), ListUtils.getEmptyListFromNullList(item.getSnippet().getTags()), "", item.getSnippet().getChannelId());
+        }
     }
 
 
