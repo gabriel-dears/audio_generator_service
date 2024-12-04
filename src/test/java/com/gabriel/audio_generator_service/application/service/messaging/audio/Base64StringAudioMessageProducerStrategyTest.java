@@ -2,6 +2,7 @@ package com.gabriel.audio_generator_service.application.service.messaging.audio;
 
 import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import com.gabriel.audio_generator_service.infrastructure.utils.FileConverter;
+import com.gabriel.audio_generator_service.infrastructure.utils.FileNameExtractor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import java.io.File;
 import java.io.IOException;
 
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class Base64StringAudioMessageProducerStrategyTest {
@@ -34,12 +37,25 @@ class Base64StringAudioMessageProducerStrategyTest {
 
     @Test
     void shouldSendBase64MessageSuccessfully() throws IOException {
-        try (MockedStatic<FileConverter> mockedFileConverter = mockStatic(FileConverter.class)) {
+        try (MockedStatic<FileConverter> mockedFileConverter = mockStatic(FileConverter.class);
+             MockedStatic<FileNameExtractor> mockedFileNameExtractor = mockStatic(FileNameExtractor.class)) {
 
+            // Mock the static methods
             mockedFileConverter.when(() -> FileConverter.fileToBase64(mockFile)).thenReturn("base64String");
-            base64StringAudioMessageProducerStrategy.sendMessage(videoDetails, mockFile);
+            mockedFileNameExtractor.when(() -> FileNameExtractor.extractValueFromString(anyString(), eq("_(\\d+)(?=\\.wav$)"))).thenReturn("000");
+
+            // Mock RabbitTemplate
+            RabbitTemplate rabbitTemplateMock = mock(RabbitTemplate.class);
+
+            // Create the strategy with the mocked RabbitTemplate
+            Base64StringAudioMessageProducerStrategy producerStrategy =
+                    new Base64StringAudioMessageProducerStrategy(rabbitTemplateMock);
+
+            // Call the method under test
+            producerStrategy.sendMessage(videoDetails, mockFile);
         }
     }
+
 
     @Test
     void shouldNotSendBase64MessageWhenFileIsNull() throws IOException {

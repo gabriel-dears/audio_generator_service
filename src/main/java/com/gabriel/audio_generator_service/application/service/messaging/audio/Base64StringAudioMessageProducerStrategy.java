@@ -4,6 +4,7 @@ import com.gabriel.audio_generator_service.application.messaging.AudioChunkMessa
 import com.gabriel.audio_generator_service.application.service.AudioMessageProducerStrategy;
 import com.gabriel.audio_generator_service.domain.model.VideoDetails;
 import com.gabriel.audio_generator_service.infrastructure.utils.FileConverter;
+import com.gabriel.audio_generator_service.infrastructure.utils.FileNameExtractor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -32,15 +33,17 @@ public class Base64StringAudioMessageProducerStrategy implements AudioMessagePro
 
     private void handleBase64Submission(VideoDetails videoDetails, File audioChunkFile) throws IOException {
         String base64Chunk = getBase64ChunkAsBase64(audioChunkFile);
-        sendStringMessage(videoDetails, base64Chunk);
+        String fileName = audioChunkFile.getName();
+        String audioPart = FileNameExtractor.extractValueFromString(fileName, "_(\\d+)(?=\\.wav$)");
+        sendStringMessage(videoDetails, base64Chunk, audioPart);
     }
 
     private static String getBase64ChunkAsBase64(File audioChunkFile) throws IOException {
         return FileConverter.fileToBase64(audioChunkFile);
     }
 
-    private void sendStringMessage(VideoDetails videoDetails, String base64Chunk) {
-        AudioChunkMessage audioChunkMessage = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), base64Chunk, videoDetails.tags(), videoDetails.categoryId());
+    private void sendStringMessage(VideoDetails videoDetails, String base64Chunk, String audioPart) {
+        AudioChunkMessage audioChunkMessage = new AudioChunkMessage(videoDetails.channelId(), videoDetails.videoId(), base64Chunk, videoDetails.tags(), videoDetails.categoryId(), audioPart);
         rabbitTemplate.convertAndSend(exchange, routingKey, audioChunkMessage);
         System.out.println("Sent message: " + audioChunkMessage);
     }
